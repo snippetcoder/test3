@@ -1,0 +1,80 @@
+﻿@model PagedList.IPagedList<ContosoUniversity.Models.Lead>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Leads</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create", "Lead", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Export Excel", "ExportToExcel", "Lead", null, new { @class = "btn btn-success pull-right" })
+</p>
+<hr />
+@using (Html.BeginForm("Index", "Lead", FormMethod.Get))
+{
+    <p class="form-inline">
+        Find by: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control", @placeholder = "Email / Client Name / Company" })
+        <input type="submit" value="Search" class="btn btn-default" />
+    </p>
+}
+<div class="table-responsive">
+    <table class="table table-hover">
+        <tr>
+            <th>
+                @Html.ActionLink("Email", "Index", new { sortOrder = ViewBag.EmailDateSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Source", "Index", new { sortOrder = ViewBag.SourceSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Requested Date", "Index", new { sortOrder = ViewBag.RequestDateSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Case Attended By", "Index", new { sortOrder = ViewBag.CaseAttendedBySortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Client Name", "Index", new { sortOrder = ViewBag.ClientNameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Company Name", "Index", new { sortOrder = ViewBag.CompanyNameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Source)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CaseAttendedBy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompanyName)
+                </td>
+                <td>
+                    @Html.ActionLink("View", "Edit", new { id = item.LeadId }, new { @class = "btn btn-xs btn-primary" })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.LeadId }, new { @class = "btn btn-xs btn-danger" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

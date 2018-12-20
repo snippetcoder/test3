@@ -1,0 +1,78 @@
+﻿@using ContosoUniversity.CustomAuthentication
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Leads Tracker</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script type="text/javascript">
+        var appInsights = window.appInsights || function (config) {
+            function s(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, r = document, f = window, e = "script", o = r.createElement(e), i, u; for (o.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js", r.getElementsByTagName(e)[0].parentNode.appendChild(o), t.cookie = r.cookie, t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace"]; i.length;)s("track" + i.pop()); return config.disableExceptionTracking || (i = "onerror", s("_" + i), u = f[i], f[i] = function (config, r, f, e, o) { var s = u && u(config, r, f, e, o); return s !== !0 && t["_" + i](config, r, f, e, o), s }), t
+        }({
+            instrumentationKey: "615aadc5-8508-46e7-aa93-713181a155ae"
+        });
+
+        window.appInsights = appInsights;
+        appInsights.trackPageView();
+
+    </script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Leads Tracker", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <div class="container">
+                    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        var identity = ((CustomPrincipal)HttpContext.Current.User);
+
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Leads", "Index", "Lead")</li>
+                            @if (HttpContext.Current.User.IsInRole("Administrator"))
+                            {
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        Settings
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Country / License Type Management", "Index", "CountryLicenseType")</li>
+                                        <li>@Html.ActionLink("Service Request Management", "Index", "ServiceRequest")</li>
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>@Html.Label(string.Format("Welcome {0} {1} ", identity.FirstName, identity.LastName), new { @class = "nav navbar-text" })</li>
+                            <li><br /><br /></li>
+                            <li class="nav nav-item">@Html.ActionLink("Log out", "LogOut", "Account")</li>
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Leads Tracker</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

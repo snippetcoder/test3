@@ -1,0 +1,40 @@
+﻿@model IEnumerable<ContosoUniversity.Models.CountryLicenseType>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Settings</h2>
+<h4>Country / License Type</h4>
+<p>
+    @Html.ActionLink("Create New", "Create", "CountryLicenseType", null, new { @class = "btn btn-primary" })
+</p>
+<br />
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <tr>
+            <th>
+                Name
+            </th>
+            <th class="text-right">
+                Visible
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CountryLicenseTypeName)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.IsVisible)
+            </td>
+            <td class="text-right">
+                @Html.ActionLink("Edit", "Edit", new { id = item.CountryLicenseTypeId }, new { @class = "btn btn-xs btn-warning" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.CountryLicenseTypeId }, new { @class = "btn btn-xs btn-danger" })
+            </td>
+        </tr>
+        }
+    </table>
+</div>
